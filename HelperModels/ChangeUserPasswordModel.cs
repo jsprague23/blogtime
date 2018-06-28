@@ -4,7 +4,7 @@ namespace API_Users.Models
 {
     public class ChangeUserPasswordModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         [MaxLength(255), EmailAddress]
         public string Email { get; set; }
         [Required, MinLength(4)]

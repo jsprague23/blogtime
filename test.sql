@@ -1,5 +1,5 @@
 -- CREATE TABLE users (
---     id int NOT NULL AUTO_INCREMENT,
+--     id VARCHAR(255) NOT NULL,
 --     username VARCHAR(20) NOT NULL,
 --     email VARCHAR(255) NOT NULL,
 --     password VARCHAR(255) NOT NULL,
@@ -35,20 +35,20 @@
 --   id int NOT NULL AUTO_INCREMENT,
 --   body VARCHAR(255),
 --   title VARCHAR(255) NOT NULL,
---   authorId int NOT NULL,
+--   authorId VARCHAR(255) NOT NULL,
 
 --   PRIMARY KEY (id),
 --   INDEX (authorId),
 
 --   FOREIGN KEY (authorId)
 --     REFERENCES users(id)
--- )
+-- );
 
 
 -- CREATE TABLE userfavs (
 --   id int NOT NULL AUTO_INCREMENT,
 --   postId int NOT NULL,
---   userId int NOT NULL,
+--   userId VARCHAR(255) NOT NULL,
 
 --   PRIMARY KEY (id),
 --   INDEX (userid),
@@ -60,7 +60,7 @@
 --   FOREIGN KEY (userId)
 --     REFERENCES users(id)
 --     ON DELETE CASCADE
--- )
+-- );
 
 
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using API_Users.Models;
 using Dapper;
@@ -14,16 +15,22 @@ namespace API_Users.Repositories
 
     public UserReturnModel Register(RegisterUserModel creds)
     {
-      // encrypt the password??
-      creds.Password = BCrypt.Net.BCrypt.HashPassword(creds.Password);
       //sql
       try
       {
-        int id = _db.ExecuteScalar<int>(@"
-                INSERT INTO users (Username, Email, Password)
-                VALUES (@Username, @Email, @Password);
-                SELECT LAST_INSERT_ID();
-            ", creds);
+        var sql = @"
+      INSERT INTO users (id, username, email, password)
+      VALUES (@Id, @Username, @Email, @Password);
+      ";
+        creds.Password = BCrypt.Net.BCrypt.HashPassword(creds.Password);
+        var id = Guid.NewGuid().ToString();
+        _db.ExecuteScalar<string>(sql, new
+        {
+          Id = id,
+          Username = creds.Username,
+          Email = creds.Email,
+          Password = creds.Password
+        });
 
         return new UserReturnModel()
         {
@@ -111,6 +118,27 @@ namespace API_Users.Repositories
         return "Good Job";
       }
       return "Umm nope!";
+    }
+
+    internal IEnumerable<Post> GetUserFavs(string id)
+    {
+      return _db.Query<Post>(@"
+      SELECT * FROM userfavs uf
+      INNER JOIN posts p ON p.id = uf.postId 
+      WHERE (userId = @id)", new{id});
+    }
+
+    internal bool AddFav(int postId, string userId)
+    {
+      int id = _db.Execute(@"
+        INSERT INTO userfavs (postId, userId)
+        VALUES (@postId, @userId);
+      ", new {
+        postId,
+        userId
+      });
+
+      return id > 0;
     }
   }
 }

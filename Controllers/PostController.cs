@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using API_Users.Repositories;
 using API_Users.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API_Users.Controllers
 {
@@ -14,10 +15,13 @@ namespace API_Users.Controllers
       _db = repo;  
     }
     [HttpPost]
+    [Authorize]
     public Post CreatePost([FromBody]Post newPost)
     {
       if(ModelState.IsValid)
       {
+        var user = HttpContext.User;
+        newPost.AuthorId = user.Identity.Name;
         return _db.CreatePost(newPost);
       }
       return null;

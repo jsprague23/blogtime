@@ -94,7 +94,22 @@ namespace API_Users.Controllers
             return "How did you even get here?";
         }
 
+        [Authorize]
+        [HttpGet("favs")]
+        public IEnumerable<Post> GetUserFavs(){
+           var user = HttpContext.User.Identity.Name;
+           return _db.GetUserFavs(user);
+        }
 
+        [Authorize]
+        [HttpPost("favs/{postId}")]
+        public string AddFav(int postId){
+            bool success = _db.AddFav(postId, HttpContext.User.Identity.Name);
+            if(success){
+                return "FAV ADDED!";
+            }
+            return "FAILED TO ADD";
+        }
 
     }
 }
