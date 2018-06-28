@@ -31,6 +31,42 @@
 --     PRIMARY KEY (id)
 -- );
 
+-- CREATE TABLE posts (
+--   id int NOT NULL AUTO_INCREMENT,
+--   body VARCHAR(255),
+--   title VARCHAR(255) NOT NULL,
+--   authorId int NOT NULL,
+
+--   PRIMARY KEY (id),
+--   INDEX (authorId),
+
+--   FOREIGN KEY (authorId)
+--     REFERENCES users(id)
+-- )
+
+
+-- CREATE TABLE userfavs (
+--   id int NOT NULL AUTO_INCREMENT,
+--   postId int NOT NULL,
+--   userId int NOT NULL,
+
+--   PRIMARY KEY (id),
+--   INDEX (userid),
+
+--   FOREIGN KEY (postId)
+--     REFERENCES posts(id)
+--     ON DELETE CASCADE,
+
+--   FOREIGN KEY (userId)
+--     REFERENCES users(id)
+--     ON DELETE CASCADE
+-- )
+
+
+
+
+
+
 -- CREATE TABLE vaultkeeps (
 --     id int NOT NULL AUTO_INCREMENT,
 --     vaultId int NOT NULL,
