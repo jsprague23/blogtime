@@ -27,10 +27,10 @@ namespace API_Users.Controllers
       return null;
     }
     //get all posts
-    [HttpGet]
-    public IEnumerable<Comment> GetAll()
+    [HttpGet("post/{id}")]
+    public IEnumerable<Comment> GetByPostId(int id)
     {
-      return _db.GetAll();
+      return _db.getAllComments(id);
     }
     //get Comment by id
     [HttpGet("{id}")]
@@ -46,9 +46,28 @@ namespace API_Users.Controllers
     }
     //edit Comment
     [HttpPut("{id}")]
+    [Authorize]
     public Comment EditComment(int id, [FromBody]Comment newComment)
     {
+    if(ModelState.IsValid)
+    {
+      var User = HttpContext.User;
+      newComment.AuthorId = User.Identity.Name;
       return _db.EditComment(id, newComment);
+    }
+    return null;
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public string DeleteComment (int id)
+    {
+      bool delete = _db.Deletecomment(id);
+      if(delete)
+      {
+        return "Successfully Deleted";
+      } 
+      return "Something went wrong, please try again.";
     }
   }
 }

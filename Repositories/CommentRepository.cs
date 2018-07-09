@@ -15,17 +15,17 @@ namespace API_Users.Repositories
     public Comment CreateComment(Comment newComment)
     {
       int id = _db.ExecuteScalar<int>(@"
-                INSERT INTO comments (body, authorId)
-                VALUES (@Body, @AuthorId);
+                INSERT INTO comments (body, authorId, postId)
+                VALUES (@Body, @AuthorId, @postId);
                 SELECT LAST_INSERT_ID();
             ", newComment);
       newComment.Id = id;
       return newComment;
     }
     // GetAll Comment
-    public IEnumerable<Comment> GetAll()
+    public IEnumerable<Comment> getAllComments(int id)
     {
-      return _db.Query<Comment>("SELECT * FROM comments;");
+      return _db.Query<Comment>("SELECT * FROM comments WHERE postId=@id", new{id});
     }
     // GetbyAuthor
     public IEnumerable<Comment> GetbyAuthorId(int id)
@@ -38,17 +38,17 @@ namespace API_Users.Repositories
       return _db.QueryFirstOrDefault<Comment>("SELECT * FROM comments WHERE id = @id;", new { id });
     }
     // Edit
-    public Comment EditComment(int id, Comment comment)
+    public Comment EditComment(int id, Comment post)
     {
-      comment.Id = id;
+      post.Id = id;
       var i = _db.Execute(@"
                 UPDATE comments SET
                     body = @Body
                 WHERE id = @Id
-            ", comment);
+            ", post);
       if (i > 0)
       {
-        return comment;
+        return post;
       }
       return null;
     }
